@@ -3,4 +3,5 @@ export interface UiImage {
   seller: string
   price: string // wei
   url: string
+  isOnActiveSale: boolean
 }

@@ -13,5 +13,9 @@ export default Vue.extend({
   components: {
     VHome,
   },
+
+  mounted() {
+    this.$accessor.marketplace.fetchImages()
+  },
 })
 </script>

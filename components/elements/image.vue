@@ -27,7 +27,9 @@
             Owned!
           </span>
         </h3>
-        <p class="mt-1 text-sm text-gray-500">{{ imageSellerAddress }}</p>
+        <p class="mt-1 text-sm text-gray-500">
+          <strong>Owned by: </strong> {{ imageSellerAddress }}
+        </p>
       </div>
       <div
         class="
@@ -76,6 +78,7 @@
           font-medium
           text-gray-900
           hover:bg-gray-200
+          cursor-pointer
         "
         @click.prevent="onPurchase"
       >
@@ -98,6 +101,7 @@
           font-medium
           text-gray-900
           hover:bg-gray-200
+          cursor-pointer
         "
         @click.prevent="onSell"
       >

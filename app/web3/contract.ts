@@ -267,22 +267,23 @@ class MarketplaceContract {
     }
   }
 
-  async fetchOwnedImages(address: string) {
-    try {
-      await this.contract.methods.getOwnedImages().call({
-        from: address,
-      })
-    } catch (e: any) {
-      throw new Error(e.message)
-    }
-  }
-
   async fetchImages() {
+    const images = []
     try {
-      await this.contract.imageFromId().call()
+      const latestId = await this.contract.methods.totalIds().call()
+
+      for (let i = 1; i <= latestId; i++) {
+        try {
+          images.push(await this.contract.methods.imageFromId(i).call())
+        } catch (e: any) {
+          throw new Error(e.message)
+        }
+      }
     } catch (e: any) {
       throw new Error(e.message)
     }
+
+    return images
   }
 }
 

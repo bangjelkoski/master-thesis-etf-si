@@ -29,7 +29,7 @@ export default Vue.extend({
 
   computed: {
     images(): UiImage[] {
-      return this.$accessor.marketplace.images
+      return this.$accessor.marketplace.ownedImages
     },
   },
 })

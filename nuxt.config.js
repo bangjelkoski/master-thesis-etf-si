@@ -51,4 +51,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+  env: {
+    /** Secrets **/
+    CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
+    ALCHEMY_KEY: process.env.ALCHEMY_KEY,
+  },
 }

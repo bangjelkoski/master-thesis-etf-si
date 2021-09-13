@@ -48,6 +48,9 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ['@nuxtjs/toast', 'portal-vue/nuxt'],
+  generate: {
+    routes: ['/', '/connect', '/wallet'],
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

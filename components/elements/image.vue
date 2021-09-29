@@ -62,30 +62,7 @@
         </p>
       </div>
     </div>
-    <div v-if="isOwnedByAddress" class="mt-6">
-      <a
-        class="
-          relative
-          flex
-          bg-gray-100
-          border border-transparent
-          rounded-md
-          py-2
-          px-8
-          items-center
-          justify-center
-          text-sm
-          font-medium
-          text-gray-900
-          hover:bg-gray-200
-          cursor-pointer
-        "
-        @click.prevent="onPurchase"
-      >
-        Purchase
-      </a>
-    </div>
-    <div v-else class="mt-6">
+    <div v-if="isOwnedByAddress && !image.isOnActiveSale" class="mt-6">
       <a
         class="
           relative
@@ -108,11 +85,79 @@
         Sell
       </a>
     </div>
+    <div v-else-if="isOwnedByAddress && image.isOnActiveSale" class="mt-6">
+      <a
+        class="
+          relative
+          flex
+          bg-gray-100
+          border border-transparent
+          rounded-md
+          py-2
+          px-8
+          items-center
+          justify-center
+          text-sm
+          font-medium
+          text-gray-900
+          hover:bg-gray-200
+          cursor-pointer
+        "
+      >
+        Image already on sale!
+      </a>
+    </div>
+    <div v-else-if="!isOwnedByAddress && !image.isOnActiveSale" class="mt-6">
+      <a
+        class="
+          relative
+          flex
+          bg-gray-100
+          border border-transparent
+          rounded-md
+          py-2
+          px-8
+          items-center
+          justify-center
+          text-sm
+          font-medium
+          text-gray-900
+          hover:bg-gray-200
+          cursor-pointer
+        "
+      >
+        Not on sale!
+      </a>
+    </div>
+    <div v-else-if="!isOwnedByAddress && image.isOnActiveSale" class="mt-6">
+      <a
+        class="
+          relative
+          flex
+          bg-gray-100
+          border border-transparent
+          rounded-md
+          py-2
+          px-8
+          items-center
+          justify-center
+          text-sm
+          font-medium
+          text-gray-900
+          hover:bg-gray-200
+          cursor-pointer
+        "
+        @click.prevent="onPurchase"
+      >
+        Purchase
+      </a>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { BigNumberInWei, formatWalletAddress } from '@injectivelabs/utils'
+// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import { UiImage } from '~/types'
 
@@ -150,11 +195,25 @@ export default Vue.extend({
 
   methods: {
     onPurchase() {
-      //
+      this.$accessor.marketplace
+        .purchase({ imageId: this.image.id, price: this.image.price })
+        .then(() => {
+          this.$toast.success('Image purchased!')
+        })
+        .catch((e: any) => {
+          this.$toast.error(e.message)
+        })
     },
 
     onSell() {
-      //
+      this.$accessor.marketplace
+        .sell({ imageId: this.image.id, price: this.image.price })
+        .then(() => {
+          this.$toast.success('Image purchased!')
+        })
+        .catch((e: any) => {
+          this.$toast.error(e.message)
+        })
     },
   },
 })

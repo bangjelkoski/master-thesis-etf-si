@@ -202,63 +202,45 @@ class MarketplaceContract {
 
   constructor() {
     this.web3 = new Web3(window.ethereum as any) as Web3
+    this.web3.eth.handleRevert = true
     this.contract = new this.web3.eth.Contract(abi as any, CONTRACT_ADDRESS)
   }
 
-  async sellNewImage({
-    imageUrl,
-    price,
-    seller,
-  }: {
-    imageUrl: string
-    price: string
-    seller: string
-  }) {
-    const priceInWei = this.web3.utils.toWei(price, 'ether')
-
-    try {
-      await this.contract.methods.sellNewImage(imageUrl, priceInWei).send({
-        from: seller,
-        gasPrice: DEFAULT_GAS_PRICE,
-        gas: DEFAULT_GAS_LIMIT, // TODO: use gas estimation
-      })
-    } catch (e: any) {
-      throw new Error(e.message)
-    }
-  }
-
   async sellExistingImage({
-    imageUrl,
+    imageId,
     price,
     seller,
   }: {
-    imageUrl: string
+    imageId: string
     price: string
     seller: string
   }) {
-    const priceInWei = this.web3.utils.toWei(price, 'ether')
-
     try {
-      await this.contract.methods.sellExistingImage(imageUrl, priceInWei).send({
-        from: seller,
-        gasPrice: DEFAULT_GAS_PRICE,
-        gas: DEFAULT_GAS_LIMIT, // TODO: use gas estimation
-      })
+      return await this.contract.methods
+        .sellExistingImage(imageId, price)
+        .send({
+          from: seller,
+          gasPrice: DEFAULT_GAS_PRICE,
+          gas: DEFAULT_GAS_LIMIT, // TODO: use gas estimation
+        })
     } catch (e: any) {
       throw new Error(e.message)
     }
   }
 
   async purchaseImage({
-    imageUrl,
+    imageId,
+    price,
     buyer,
   }: {
-    imageUrl: string
+    imageId: string
+    price: string
     buyer: string
   }) {
     try {
-      await this.contract.methods.purchaseImage(imageUrl).send({
+      return await this.contract.methods.purchaseImage(imageId).send({
         from: buyer,
+        value: price,
         gasPrice: DEFAULT_GAS_PRICE,
         gas: DEFAULT_GAS_LIMIT, // TODO: use gas estimation
       })

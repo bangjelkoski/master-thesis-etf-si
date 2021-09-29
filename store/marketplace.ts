@@ -1,5 +1,5 @@
 import { actionTree, getterTree, mutationTree } from 'typed-vuex'
-import { fetchImages } from '~/app/services/marketplace'
+import { fetchImages, sell, purchase } from '~/app/services/marketplace'
 import { UiImage } from '~/types'
 
 const initialStateFactory = () => ({
@@ -66,6 +66,29 @@ export const actions = actionTree(
           )
         )
       )
+    },
+
+    async purchase({ commit }, { imageId, price }) {
+      const { address, isUserWalletConnected } = this.app.$accessor.wallet
+
+      if (!address || !isUserWalletConnected) {
+        return
+      }
+
+      await purchase({ imageId, price, address })
+      commit('setImages', await fetchImages())
+    },
+
+    async sell({ commit }, { imageId, price }) {
+      const { address, isUserWalletConnected } = this.app.$accessor.wallet
+
+      if (!address || !isUserWalletConnected) {
+        return
+      }
+
+      await sell({ imageId, address, price })
+
+      commit('setImages', await fetchImages())
     },
 
     async reset({ commit }) {

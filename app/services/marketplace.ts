@@ -17,10 +17,42 @@ export const fetchImages = async (): Promise<UiImage[]> => {
   )
 }
 
-export const purchase = async (imageId: string): Promise<string> => {
-  return await Promise.resolve(imageId)
+export const purchase = async ({
+  imageId,
+  price,
+  address,
+}: {
+  imageId: string
+  price: string
+  address: string
+}): Promise<string> => {
+  try {
+    return await marketplaceContract.purchaseImage({
+      imageId,
+      price,
+      buyer: address,
+    })
+  } catch (e: any) {
+    throw new Error(e)
+  }
 }
 
-export const sell = async (imageId: string): Promise<string> => {
-  return await Promise.resolve(imageId)
+export const sell = async ({
+  imageId,
+  address,
+  price,
+}: {
+  imageId: string
+  address: string
+  price: string
+}): Promise<string> => {
+  try {
+    return await marketplaceContract.sellExistingImage({
+      imageId,
+      price,
+      seller: address,
+    })
+  } catch (e: any) {
+    throw new Error(e)
+  }
 }
